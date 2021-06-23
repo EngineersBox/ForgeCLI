@@ -6,12 +6,24 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 )
 
 type Lang map[string]string
 
 const FileModeOct fs.FileMode = 0644
+
+var ElementNameSplitRegex = *regexp.MustCompile("[\\s-_]")
+
+func convertToReadibleName(rawName string) string {
+	splitName := ElementNameSplitRegex.Split(rawName, -1)
+	processedNameElements := make([]string, len(splitName))
+	for i := range splitName {
+		processedNameElements[i] = strings.Title(strings.ToLower(splitName[i]))
+	}
+	return strings.Join(processedNameElements, " ")
+}
 
 func CreateLangEntry(kind ElementType, resDir string, modName string, name string) {
 	langFile := strings.TrimSuffix(resDir, "\\") + "\\assets\\" + modName + "\\lang\\en_us.json"
@@ -30,7 +42,7 @@ func CreateLangEntry(kind ElementType, resDir string, modName string, name strin
 		return
 	}
 
-	contents[entry] = name
+	contents[entry] = convertToReadibleName(name)
 	b, err := json.Marshal(contents)
 	CheckError(err)
 	ioutil.WriteFile(

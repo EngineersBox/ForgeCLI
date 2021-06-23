@@ -2,9 +2,9 @@
     "mod_name": "example",
     "resources_dir": "testFS/resources",
     "registry_files": {
-        "block": "testFS/src/block.java",
-        "item": "testFS/src/item.java",
-        "tile_entity": "testFS/src/tileEntity.java",
-        "fluid": "testFS/src/fluid.java"
+        "block": "testFS/src/Blocks.java",
+        "item": "testFS/src/Items.java",
+        "tile_entity": "testFS/src/TileEntities.java",
+        "fluid": "testFS/src/Fluids.java"
     }
 }

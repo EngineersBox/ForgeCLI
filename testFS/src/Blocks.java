@@ -13,4 +13,5 @@ public class Blocks {
 
     public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", () -> new Block(Block.Properties.create(Material.IRON)));
     public static final RegistryObject<Block> TITANIUM_BLOCK = BLOCKS.register("titanium_block", () -> new Block(Block.Properties.create(Material.IRON)));
+	public static final RegistryObject<Block> SOME_TESTER_BLOCK = BLOCKS.register("some_tester_block", () -> new Block(Block.Properties.create(Material.IRON)));
 }
