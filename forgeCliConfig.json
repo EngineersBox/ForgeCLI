@@ -1,0 +1,10 @@
+{
+    "mod_name": "example",
+    "resources_dir": "resources",
+    "registry_files": {
+        "block": "src/block.java",
+        "item": "src/item.java",
+        "tile_entity": "src/tileEntity.java",
+        "fluid": "src/fluid.java"
+    }
+}
