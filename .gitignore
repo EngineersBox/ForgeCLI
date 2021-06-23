@@ -1,0 +1,5 @@
+# Excludes the test stuff
+src
+src/*
+resources
+resources/*
