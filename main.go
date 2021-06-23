@@ -5,6 +5,7 @@ import (
 	"engineersbox/forgecli/registration/block"
 	"engineersbox/forgecli/registration/common"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
@@ -43,6 +44,9 @@ var commands = map[string]cli.SubCommand{
 			},
 		},
 	},
+	"help": {
+		ErrorHandler: flag.ExitOnError,
+	},
 }
 
 func check(e error) {
@@ -51,38 +55,63 @@ func check(e error) {
 	}
 }
 
-func blockCommandHandler(blockCmd *cli.Command, cfg config.ForgeCLIConfig) {
-	block.CreateBlockState(
-		cfg.ResourcesDir,
-		cfg.ModName,
-		*blockCmd.Flags["name"].GetString(),
-	)
-	block.CreateBlockModel(
-		cfg.ResourcesDir,
-		cfg.ModName,
-		*blockCmd.Flags["name"].GetString(),
-	)
-	block.CreateBlockItemModel(
-		cfg.ResourcesDir,
-		cfg.ModName,
-		*blockCmd.Flags["name"].GetString(),
-	)
-	common.CreateLangEntry(
-		common.Block,
-		cfg.ResourcesDir,
-		cfg.ModName,
-		*blockCmd.Flags["name"].GetString(),
-	)
-	block.CreateRegistryObject(
-		cfg.ModName,
-		*blockCmd.Flags["name"].GetString(),
-		*blockCmd.Flags["mat"].GetString(),
-		cfg.RegFiles.Block,
-	)
-}
+type HandlerFunc func(*cli.Command, config.ForgeCLIConfig)
 
-func itemCommandHandler(itemCmd *cli.Command, cfg config.ForgeCLIConfig) {
-	return
+var handlerMapper = map[string]HandlerFunc{
+	"block": func(blockCmd *cli.Command, cfg config.ForgeCLIConfig) {
+		block.CreateBlockState(
+			cfg.ResourcesDir,
+			cfg.ModName,
+			*blockCmd.Flags["name"].GetString(),
+		)
+		block.CreateBlockModel(
+			cfg.ResourcesDir,
+			cfg.ModName,
+			*blockCmd.Flags["name"].GetString(),
+		)
+		block.CreateBlockItemModel(
+			cfg.ResourcesDir,
+			cfg.ModName,
+			*blockCmd.Flags["name"].GetString(),
+		)
+		common.CreateLangEntry(
+			common.Block,
+			cfg.ResourcesDir,
+			cfg.ModName,
+			*blockCmd.Flags["name"].GetString(),
+		)
+		block.CreateRegistryObject(
+			cfg.ModName,
+			*blockCmd.Flags["name"].GetString(),
+			*blockCmd.Flags["mat"].GetString(),
+			cfg.RegFiles.Block,
+		)
+	},
+	"item": func(itemCmd *cli.Command, cfg config.ForgeCLIConfig) {
+		return
+	},
+	"help": func(itemCmd *cli.Command, cfg config.ForgeCLIConfig) {
+		fmt.Printf(`
+$> forgecli <COMMAND> [...<OPTIONS>]
+
+Commands:
+  block		Create a new block registration
+	--name	The name of the block\n
+	--mat	Block material type, this must be one of the
+		net.minecraft.block.material.Material enum values
+
+  item		Create a new item registration
+	--name	The name of the item
+
+  fluid		Create a new fluid registration
+	--name	The name of the fluid
+
+  tilentity	Create a new tile entity registration
+	--name	The name of the tilentity
+
+  help		Displays this message
+		`)
+	},
 }
 
 func main() {
@@ -94,9 +123,10 @@ func main() {
 	common.CheckError(err)
 
 	cmd := os.Args[1]
-	if cmd == "block" {
-		blockCommandHandler(forgeCLI.Commands["block"], config)
-	} else if cmd == "item" {
-		itemCommandHandler(forgeCLI.Commands["item"], config)
+	handler, ok := handlerMapper[cmd]
+	if !ok {
+		log.Fatalf("[ERROR] Unknown command: %s", cmd)
 	}
+
+	handler(forgeCLI.Commands[cmd], config)
 }
