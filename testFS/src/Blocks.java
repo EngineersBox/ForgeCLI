@@ -1,4 +1,4 @@
-package com.engineersbox.examples.common.register;
+package com.engineersbox.example.common.register;
 
 import com.engineersbox.example.ExampleMod;
 import net.minecraft.block.Block;
