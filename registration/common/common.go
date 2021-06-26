@@ -14,7 +14,7 @@ type Lang map[string]string
 
 const FileModeOct fs.FileMode = 0644
 
-var ElementNameSplitRegex = *regexp.MustCompile("[\\s-_]")
+var ElementNameSplitRegex = *regexp.MustCompile(`[\s-_]`)
 
 func convertToReadibleName(rawName string) string {
 	splitName := ElementNameSplitRegex.Split(rawName, -1)
