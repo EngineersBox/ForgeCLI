@@ -1,0 +1,1 @@
+public static final RegistryObject<Block> <0> = BLOCKS.register("<1>", () -> new Block(Block.Properties.create(Material.<2>)));

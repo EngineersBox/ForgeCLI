@@ -26,7 +26,7 @@ func convertToReadibleName(rawName string) string {
 }
 
 func CreateLangEntry(kind ElementType, resDir string, modName string, name string) {
-	langFile := strings.TrimSuffix(resDir, "\\") + "\\assets\\" + modName + "\\lang\\en_us.json"
+	langFile := strings.TrimSuffix(resDir, "/") + "/assets/" + modName + "/lang/en_us.json"
 	contents := Lang{}
 	if _, err := os.Stat(langFile); err == nil {
 		b, err := ioutil.ReadFile(langFile)

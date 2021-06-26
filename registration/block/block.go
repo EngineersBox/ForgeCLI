@@ -2,6 +2,7 @@ package block
 
 import (
 	"engineersbox/forgecli/registration/common"
+	template "engineersbox/forgecli/templates"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -11,10 +12,14 @@ import (
 const FileModeOct fs.FileMode = 0644
 
 func CreateBlockState(resDir string, modName string, blockName string) {
-	contents := strings.Replace(BlockState, "<0>", modName, 1)
-	contents = strings.Replace(contents, "<1>", blockName, 1)
+	blockState := template.ImportTemplate(template.SingleModelBlockState)
+	formatters := map[string]string{
+		"<0>": modName,
+		"<1>": blockName,
+	}
+	contents := template.ReplaceInlineFormatters(blockState, formatters)
 	ioutil.WriteFile(
-		strings.TrimSuffix(resDir, "\\")+"\\assets\\"+modName+"\\blockstates\\"+blockName+".json",
+		strings.TrimSuffix(resDir, "/")+"/assets/"+modName+"/blockstates/"+blockName+".json",
 		[]byte(contents),
 		FileModeOct,
 	)
@@ -22,10 +27,14 @@ func CreateBlockState(resDir string, modName string, blockName string) {
 }
 
 func CreateBlockModel(resDir string, modName string, blockName string) {
-	contents := strings.Replace(BlockModel, "<0>", modName, 1)
-	contents = strings.Replace(contents, "<1>", blockName, 1)
+	blockModel := template.ImportTemplate(template.FullBlockSingleTextureModel)
+	formatters := map[string]string{
+		"<0>": modName,
+		"<1>": blockName,
+	}
+	contents := template.ReplaceInlineFormatters(blockModel, formatters)
 	ioutil.WriteFile(
-		strings.TrimSuffix(resDir, "\\")+"\\assets\\"+modName+"\\models\\block\\"+blockName+".json",
+		strings.TrimSuffix(resDir, "/")+"/assets/"+modName+"/models/block/"+blockName+".json",
 		[]byte(contents),
 		FileModeOct,
 	)
@@ -33,10 +42,14 @@ func CreateBlockModel(resDir string, modName string, blockName string) {
 }
 
 func CreateBlockItemModel(resDir string, modName string, blockName string) {
-	contents := strings.Replace(BlockItemModel, "<0>", modName, 1)
-	contents = strings.Replace(contents, "<1>", blockName, 1)
+	blockItemModel := template.ImportTemplate(template.BlockItemParent)
+	formatters := map[string]string{
+		"<0>": modName,
+		"<1>": blockName,
+	}
+	contents := template.ReplaceInlineFormatters(blockItemModel, formatters)
 	ioutil.WriteFile(
-		strings.TrimSuffix(resDir, "\\")+"\\assets\\"+modName+"\\models\\item\\"+blockName+".json",
+		strings.TrimSuffix(resDir, "/")+"/assets/"+modName+"/models/item/"+blockName+".json",
 		[]byte(contents),
 		FileModeOct,
 	)
@@ -57,9 +70,15 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 	}
 
 	contents = strings.TrimSuffix(strings.TrimSpace(contents), "}")
-	registryEntry := strings.Replace(RegistryObject, "<0>", constBlockName, 1)
-	registryEntry = strings.Replace(registryEntry, "<1>", blockID, 1)
-	registryEntry = strings.Replace(registryEntry, "<2>", strings.ToUpper(material), 1)
+
+	registryTemplate := template.ImportTemplate(template.RegistryBasicBlockWithMaterial)
+	formatters := map[string]string{
+		"<0>": constBlockName,
+		"<1>": blockID,
+		"<2>": strings.ToUpper(material),
+	}
+	registryEntry := template.ReplaceInlineFormatters(registryTemplate, formatters)
+
 	contents += "\t" + registryEntry + "\n}\n"
 	ioutil.WriteFile(
 		registryDir,
