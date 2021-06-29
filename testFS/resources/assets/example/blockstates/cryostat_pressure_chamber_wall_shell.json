@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "example:block/cryostat_pressure_chamber_wall_shell"
+    }
+  }
+}

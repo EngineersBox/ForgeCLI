@@ -6,10 +6,17 @@ import (
 	template "engineersbox/forgecli/templates"
 	"io/fs"
 	"io/ioutil"
+	"regexp"
 	"strings"
 )
 
-const FileModeOct fs.FileMode = 0644
+const (
+	FileModeOct         fs.FileMode = 0644
+	RegistryNamePrefix              = "DeferredRegister<Block>"
+	DefaultRegistryName             = "BLOCK"
+)
+
+var RegistryNameRegex = regexp.MustCompile(RegistryNamePrefix + `\s[a-zA-Z\-_]*\s`)
 
 func CreateBlockState(resDir string, modName string, blockName string) {
 	blockState := template.ImportTemplate(template.SingleModelBlockState)
@@ -61,6 +68,8 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 	common.CheckError(err)
 	contents := string(b)
 
+	registryName := findBlockRegistryName(contents)
+
 	constBlockName := strings.ReplaceAll(strings.ToUpper(blockName), "-", "_")
 	blockID := strings.ToLower(constBlockName)
 
@@ -74,8 +83,9 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 	registryTemplate := template.ImportTemplate(template.RegistryBasicBlockWithMaterial)
 	formatters := map[string]string{
 		"<0>": constBlockName,
-		"<1>": blockID,
-		"<2>": strings.ToUpper(material),
+		"<1>": registryName,
+		"<2>": blockID,
+		"<3>": strings.ToUpper(material),
 	}
 	registryEntry := template.ReplaceInlineFormatters(registryTemplate, formatters)
 
@@ -86,4 +96,14 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 		FileModeOct,
 	)
 	logging.Info("(block." + modName + "." + blockID + ") Added block registry entry")
+}
+
+func findBlockRegistryName(content string) string {
+	registryName := string(RegistryNameRegex.Find([]byte(content)))
+	registryName = strings.TrimPrefix(registryName, RegistryNamePrefix)
+	registryName = strings.TrimSpace(registryName)
+	if len(registryName) > 0 {
+		return registryName
+	}
+	return DefaultRegistryName
 }
