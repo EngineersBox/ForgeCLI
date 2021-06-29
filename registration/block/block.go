@@ -1,7 +1,7 @@
 package block
 
 import (
-	"engineersbox/forgecli/logging/log"
+	"engineersbox/forgecli/logging"
 	"engineersbox/forgecli/registration/common"
 	template "engineersbox/forgecli/templates"
 	"io/fs"
@@ -23,7 +23,7 @@ func CreateBlockState(resDir string, modName string, blockName string) {
 		[]byte(contents),
 		FileModeOct,
 	)
-	log.Info("(block." + modName + "." + blockName + ") Created blockstate")
+	logging.Info("(block." + modName + "." + blockName + ") Created blockstate")
 }
 
 func CreateBlockModel(resDir string, modName string, blockName string) {
@@ -38,7 +38,7 @@ func CreateBlockModel(resDir string, modName string, blockName string) {
 		[]byte(contents),
 		FileModeOct,
 	)
-	log.Info("(block." + modName + "." + blockName + ") Created block model")
+	logging.Info("(block." + modName + "." + blockName + ") Created block model")
 }
 
 func CreateBlockItemModel(resDir string, modName string, blockName string) {
@@ -53,7 +53,7 @@ func CreateBlockItemModel(resDir string, modName string, blockName string) {
 		[]byte(contents),
 		FileModeOct,
 	)
-	log.Info("(block." + modName + "." + blockName + ") Created block item")
+	logging.Info("(block." + modName + "." + blockName + ") Created block item")
 }
 
 func CreateRegistryObject(modName string, blockName string, material string, registryDir string) {
@@ -65,7 +65,7 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 	blockID := strings.ToLower(constBlockName)
 
 	if strings.Contains(contents, constBlockName) {
-		log.Warn("Registry already has entry for " + blockID + ", skipping")
+		logging.Warn("Registry already has entry for " + blockID + ", skipping")
 		return
 	}
 
@@ -85,5 +85,5 @@ func CreateRegistryObject(modName string, blockName string, material string, reg
 		[]byte(contents),
 		FileModeOct,
 	)
-	log.Info("(block." + modName + "." + blockID + ") Added block registry entry")
+	logging.Info("(block." + modName + "." + blockID + ") Added block registry entry")
 }

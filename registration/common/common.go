@@ -2,7 +2,7 @@ package common
 
 import (
 	"encoding/json"
-	"engineersbox/forgecli/logging/log"
+	"engineersbox/forgecli/logging"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -38,7 +38,7 @@ func CreateLangEntry(kind ElementType, resDir string, modName string, name strin
 	entry := string(kind) + "." + modName + "." + name
 
 	if _, ok := contents[entry]; ok {
-		log.Warn("Lang already has entry for " + name + ", skipping")
+		logging.Warn("Lang already has entry for " + name + ", skipping")
 		return
 	}
 
@@ -50,5 +50,5 @@ func CreateLangEntry(kind ElementType, resDir string, modName string, name strin
 		[]byte(b),
 		FileModeOct,
 	)
-	log.Info("(" + string(kind) + "." + modName + "." + name + ") Created lang entry")
+	logging.Info("(" + string(kind) + "." + modName + "." + name + ") Created lang entry")
 }

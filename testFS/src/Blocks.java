@@ -16,4 +16,5 @@ public class Blocks {
 	public static final RegistryObject<Block> SOME_TESTER_BLOCK = BLOCKS.register("some_tester_block", () -> new Block(Block.Properties.create(Material.IRON)));
 	public static final RegistryObject<Block> RANDOM_TEST_BLOCK = BLOCKS.register("random_test_block", () -> new Block(Block.Properties.create(Material.GLASS)));
 	public static final RegistryObject<Block> ANOTHER_TEST_BLOCK = BLOCKS.register("another_test_block", () -> new Block(Block.Properties.create(Material.GLASS)));
+	public static final RegistryObject<Block> CRYOSTAT_PRESSURE_CHAMBER_WALL = BLOCKS.register("cryostat_pressure_chamber_wall", () -> new Block(Block.Properties.create(Material.IRON)));
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"engineersbox/forgecli/config"
-	"engineersbox/forgecli/logging/log"
+	"engineersbox/forgecli/logging"
 	"engineersbox/forgecli/registration/block"
 	"engineersbox/forgecli/registration/common"
 	"flag"
@@ -51,7 +51,7 @@ var commands = map[string]cli.SubCommand{
 
 func check(e error) {
 	if e != nil {
-		log.Fatal(e)
+		logging.Fatal(e)
 	}
 }
 
@@ -125,7 +125,7 @@ func main() {
 	cmd := os.Args[1]
 	handler, ok := handlerMapper[cmd]
 	if !ok {
-		log.Fatal(" Unknown command: %s", cmd)
+		logging.Fatal(" Unknown command: %s", cmd)
 	}
 
 	handler(forgeCLI.Commands[cmd], config)
