@@ -2,11 +2,11 @@ package main
 
 import (
 	"engineersbox/forgecli/config"
+	"engineersbox/forgecli/logging/log"
 	"engineersbox/forgecli/registration/block"
 	"engineersbox/forgecli/registration/common"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/EngineersBox/ModularCLI/cli"
@@ -125,7 +125,7 @@ func main() {
 	cmd := os.Args[1]
 	handler, ok := handlerMapper[cmd]
 	if !ok {
-		log.Fatalf("[ERROR] Unknown command: %s", cmd)
+		log.Fatal(" Unknown command: %s", cmd)
 	}
 
 	handler(forgeCLI.Commands[cmd], config)
